@@ -45,10 +45,6 @@ export const groupOverlappingEvents = (events: IEvent[]) => {
                 break;
             }
         }
-        console.log("🚀 ~ groupOverlappingEvents ~ group:", group)
-
-
-
         groups.push(group);
         i += group.length - 1;
     }

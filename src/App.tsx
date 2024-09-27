@@ -1,7 +1,7 @@
 
 import './App.css';
 import events from './input.json'
-import { eventsSortedByStartTime, groupOverlappingEvents } from './lib/utils';
+import { eventsSortedByStartTime, groupOverlappingEvents, IEvent } from './lib/utils';
 
 const CALENDAR_START = 9; // 09:00 AM
 const CALENDAR_END = 21; // 09:00 PM
@@ -11,6 +11,38 @@ const parseTime = (time: string) => {
   const [hours, minutes] = time.split(':').map(Number);
   return hours * 60 + minutes - CALENDAR_START * 60;
 };
+
+type EventProps = {
+  event: IEvent
+  height: number
+  width: number
+  left: number
+  top: number
+}
+
+const Event = ({ event, height, width, left, top }: EventProps) => {
+  return (
+    <div
+      key={event.id}
+      style={{
+        backgroundColor: 'lightblue',
+        border: '1px solid blue',
+        position: 'absolute',
+        height: `${height}%`,
+        width: `${width}%`,
+        left: `${left}%`,
+        top: `${top}%`,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+    >
+      <span >{event.id}</span>
+      <span style={{ margin: 6 }}>{event.start}</span>
+      <span>{`${event.duration} min`}</span>
+    </div>
+  )
+}
 
 
 function App() {
@@ -26,25 +58,7 @@ function App() {
           const left = (idx / group.length) * 100
           const top = (parseTime(element.start) / TOTAL_MINUTES) * 100;
           return (
-            <div
-              key={element.id}
-              style={{
-                backgroundColor: 'lightblue',
-                border: '1px solid blue',
-                position: 'absolute',
-                height: `${height}%`,
-                width: `${width}%`,
-                left: `${left}%`,
-                top: `${top}%`,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              <span >{element.id}</span>
-              <span style={{ margin: 6 }}>{element.start}</span>
-              <span>{`${element.duration} min`}</span>
-            </div>
+            <Event key={element.id} event={element} height={height} width={width} left={left} top={top} />
           )
         })
       })}
